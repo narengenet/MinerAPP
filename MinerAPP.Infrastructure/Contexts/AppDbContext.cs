@@ -22,9 +22,9 @@ namespace MinerAPP.Infrastructure.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Users sina = new Users { ID = 1, Name = "Sina", Family = "Jouybari", Cellphone = "09394125130", Username = "sinful", ProfileMediaURL = "uploads/2022/9/sina2.jpg" };
-            Users mohsen = new Users { ID = 2, Name = "محسن", Family = "پردلان", Cellphone = "09111769591", Username = "vinona", ProfileMediaURL = "uploads/2022/9/99.jpg" };
-            Users sepideh = new Users { ID = 3, Name = "سپیده", Family = "یاراحمدی", Cellphone = "09163681249", Username = "sepideh", ProfileMediaURL = "uploads/2022/9/photo.jpg" };
+            Users sina = new Users { Id = Guid.NewGuid(), Name = "Sina", Family = "Jouybari", Cellphone = "09394125130", Username = "sinful", ProfileMediaURL = "uploads/2022/9/sina2.jpg" };
+            Users mohsen = new Users { Id = Guid.NewGuid(), Name = "محسن", Family = "پردلان", Cellphone = "09111769591", Username = "vinona", ProfileMediaURL = "uploads/2022/9/99.jpg" };
+            Users sepideh = new Users { Id = Guid.NewGuid(), Name = "سپیده", Family = "یاراحمدی", Cellphone = "09163681249", Username = "sepideh", ProfileMediaURL = "uploads/2022/9/photo.jpg" };
             modelBuilder.Entity<Users>().HasData(sina);
             modelBuilder.Entity<Users>().HasData(mohsen);
             modelBuilder.Entity<Users>().HasData(sepideh);

@@ -11,8 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 
-builder.Services.AddScoped<IUsersRepository, UserRepository>();
-builder.Services.AddScoped<IUsersServices, UsersServices>();
+//builder.Services.AddScoped<IUsersRepository, UserRepository>();
+//builder.Services.AddScoped<IUsersServices, UsersServices>();
+builder.Services.AddIoCService();
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 builder.Services.AddRazorPages();
 

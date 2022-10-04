@@ -40,7 +40,7 @@ namespace MinerAPP.Infrastructure.Services
 
         public List<string> GetUsernames()
         {
-            Users[] users = _userRepo.GetUsers().ToArray();
+            Users[] users = _userRepo.GetAll().ToArray();
             List<String> usernames = new List<string>();
             foreach (Users item in users)
             {
