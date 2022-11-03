@@ -41,11 +41,18 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Family")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActivated")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
@@ -68,6 +75,9 @@ namespace MinerAPP.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("WalletAddress")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -75,10 +85,12 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a276ae1b-cf15-4318-ac35-985c58e40ed9"),
-                            Cellphone = "09394125130",
+                            Id = new Guid("2a365a02-6a9c-4ce7-81df-0ac4ce3aea27"),
+                            Cellphone = "00989394125130",
+                            Email = "sina@yahoo.com",
                             Family = "Jouybari",
                             IsActivated = false,
+                            IsDeleted = false,
                             Name = "Sina",
                             Points = 0L,
                             ProfileMediaURL = "uploads/2022/9/sina2.jpg",
@@ -86,10 +98,12 @@ namespace MinerAPP.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8fe7656a-0c88-45db-895d-e2d262bbe4c1"),
-                            Cellphone = "09111769591",
+                            Id = new Guid("bd104368-c8a3-4ede-bcc1-1777e97c614c"),
+                            Cellphone = "00989111769591",
+                            Email = "vinona@yahoo.com",
                             Family = "پردلان",
                             IsActivated = false,
+                            IsDeleted = false,
                             Name = "محسن",
                             Points = 0L,
                             ProfileMediaURL = "uploads/2022/9/99.jpg",
@@ -97,10 +111,12 @@ namespace MinerAPP.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("86ff82c4-a1fe-449c-a7d5-4704cf8444eb"),
-                            Cellphone = "09163681249",
+                            Id = new Guid("73b9f9d6-4d92-4007-99e4-85c466a11852"),
+                            Cellphone = "00989166666666",
+                            Email = "sep@yahoo.com",
                             Family = "یاراحمدی",
                             IsActivated = false,
+                            IsDeleted = false,
                             Name = "سپیده",
                             Points = 0L,
                             ProfileMediaURL = "uploads/2022/9/photo.jpg",

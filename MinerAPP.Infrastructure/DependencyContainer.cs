@@ -16,7 +16,7 @@ namespace MinerAPP.Infrastructure
         {
             services.AddScoped<IUsersRepository, UserRepository>();
 
-            services.AddScoped<UsersServices, UsersServices>();
+            services.AddScoped<IUsersServices, UsersServices>();
         }
     }
 }

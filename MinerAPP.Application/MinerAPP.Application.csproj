@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
+
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MinerAPP.Core\MinerAPP.Core.csproj" />
   </ItemGroup>
 

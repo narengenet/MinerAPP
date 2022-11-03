@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MinerAPP.Application;
 using MinerAPP.Application.Interfaces;
 using MinerAPP.Infrastructure;
 using MinerAPP.Infrastructure.Contexts;
@@ -16,11 +17,14 @@ builder.Services.AddControllers();
 builder.Services.AddIoCService();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+builder.Services.AddApplicationLayer();
+
 builder.Services.AddRazorPages();
 
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
+
 
 
 

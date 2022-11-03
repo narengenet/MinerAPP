@@ -1,4 +1,5 @@
-﻿using MinerAPP.Core.Domain;
+﻿using MinerAPP.Application.DTO;
+using MinerAPP.Core.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,11 @@ namespace MinerAPP.Application.Interfaces
     public interface IUsersServices
     {
         List<String> GetUsernames();
-        Users GetUser(int id);
+        Users GetUser(Guid id);
         Users GetUserByUsername(string username);
         Users GetUserByCellphone(string cellphone);
-        List<Users> GetUsers(int pageNumber);
-        List<Users> GetAllUsers();
+        List<User> GetUsers(int pageNumber);
+        List<User> GetAllUsers();
+        public Guid? AddUser(User user);
     }
 }

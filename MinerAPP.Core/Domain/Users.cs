@@ -19,10 +19,16 @@ namespace MinerAPP.Core.Domain
         public string? ConfirmationCode { get; set; }
         public long Points { get; set; }
         public string? ProfileMediaURL { get; set; }
+        public string Email { get; set; }
+        public string? WalletAddress { get; set; }
 
         public Users()
         {
 
+        }
+        public string FullName()
+        {
+            return this.Name + " " + this.Family;
         }
 
 
