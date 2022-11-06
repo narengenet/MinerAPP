@@ -14,7 +14,9 @@ namespace MinerAPP.Application.DTO
         public string username { get; set; }
         public string email { get; set; }
         public string phone { get; set; }
-        
+        public string? imei { get; set; }
+        public string? devicemodel { get; set; }
+
 
     }
 }

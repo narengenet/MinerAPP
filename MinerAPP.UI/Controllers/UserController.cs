@@ -7,6 +7,7 @@ using MinerAPP.Application.DTO;
 using MinerAPP.Application.Interfaces;
 using MinerAPP.Core.Domain;
 using MailKit.Net.Smtp;
+using MinerAPP.Infrastructure;
 
 namespace MinerAPP.UI.Controllers
 {
@@ -32,7 +33,7 @@ namespace MinerAPP.UI.Controllers
 
         public ActionResult GetAll()
         {
-            List<User> users = _usersServices.GetAllUsers();
+            List<User> users = _usersServices.GetAllUser();
 
             return Ok(users);
         }
@@ -52,8 +53,8 @@ namespace MinerAPP.UI.Controllers
         // GET: UserController/checkemail/emailaddress
         public ActionResult checkemail(string id)
         {
-            User usr = _usersServices.GetAllUsers().Where(u => u.email == id).FirstOrDefault();
-            if (usr==null)
+            User usr = _usersServices.GetAllUser().Where(u => u.email == id).FirstOrDefault();
+            if (usr == null)
             {
                 return Ok("ok");
             }
@@ -61,12 +62,12 @@ namespace MinerAPP.UI.Controllers
             {
                 return Ok("-1");
             }
-            
+
         }        // GET: UserController/checkemail/emailaddress
         public ActionResult checkmobile(string id)
         {
-            User usr = _usersServices.GetAllUsers().Where(u => u.phone == id).FirstOrDefault();
-            if (usr==null)
+            User usr = _usersServices.GetAllUser().Where(u => u.phone == id).FirstOrDefault();
+            if (usr == null)
             {
                 return Ok("ok");
             }
@@ -74,12 +75,12 @@ namespace MinerAPP.UI.Controllers
             {
                 return Ok("-1");
             }
-            
+
         }
         public ActionResult checkusername(string id)
         {
-            User usr = _usersServices.GetAllUsers().Where(u => u.username == id).FirstOrDefault();
-            if (usr==null)
+            User usr = _usersServices.GetAllUser().Where(u => u.username == id).FirstOrDefault();
+            if (usr == null)
             {
                 return Ok("ok");
             }
@@ -87,18 +88,169 @@ namespace MinerAPP.UI.Controllers
             {
                 return Ok("-1");
             }
-            
+
         }
 
         [HttpPost]
         public ActionResult registerClient([FromBody] User newUser)
         {
-            Guid? result= _usersServices.AddUser(newUser);
-            if (result==null)
+            Guid? result = _usersServices.AddUser(newUser);
+            if (result == null)
             {
                 return Ok("-1");
             }
+            
             return Ok(result.ToString());
+        }
+        [HttpPost]
+        public ActionResult confirmRegisterClient([FromBody] UserLogin userLogin)
+        {
+            Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
+            Guid? theResult = null;
+            if (result == null)
+            {
+                return Ok("-1");
+            }
+            if (result.ConfirmationCode == userLogin.confirmation)
+            {
+                _usersServices.DeleteAllUserLogins(Guid.Parse(userLogin.userid));
+                theResult = _usersServices.AddLogin(new UsersLogins
+                {
+                    Created = DateTime.Now,
+                    DeviceModel = userLogin.devicemodel,
+                    IMEI = userLogin.imei,
+                    User = Guid.Parse(userLogin.userid)
+
+                });
+                Users usr = _usersServices.GetUser(Guid.Parse(userLogin.userid));
+                usr.IsActivated = true;
+                _usersServices.UpdateUser(usr);
+            }
+
+            if (theResult != null)
+            {
+                return Ok(theResult.ToString());
+            }
+            else
+            {
+                return Ok("-1");
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult goLogin([FromBody] User userLogin)
+        {
+
+            if (userLogin.email.Contains("@"))
+            {
+                Users user = _usersServices.GetAllUsers().Where(u => u.Email == userLogin.email).FirstOrDefault();
+                if (user != null)
+                {
+                    Random r = new Random();
+                    int _confirmationCode = r.Next(10000, 99999);
+                    user.ConfirmationCode = _confirmationCode.ToString();
+                    _usersServices.UpdateUser(user);
+                    DependencyContainer.SendEmail(user.Email, "Monero Miner Email Verification", "Assets\\EmailTemplates\\RegConfirm.txt", new string[] { user.ConfirmationCode });
+                    return Ok(user.Id.ToString());
+                }
+
+            }
+            else
+            {
+                Users user = _usersServices.GetAllUsers().Where(u => u.Username == userLogin.username).FirstOrDefault();
+                if (user != null)
+                {
+                    Random r = new Random();
+                    int _confirmationCode = r.Next(10000, 99999);
+                    user.ConfirmationCode = _confirmationCode.ToString();
+                    _usersServices.UpdateUser(user);
+                    DependencyContainer.SendEmail(user.Email, "Monero Miner Email Verification", "Assets\\EmailTemplates\\RegConfirm.txt", new string[] { user.ConfirmationCode });
+                    return Ok(user.Id.ToString());
+                }
+            }
+
+            return Ok("-1");
+
+        }
+
+        [HttpPost]
+        public IActionResult verifyLogin([FromBody] UserLogin userLogin)
+        {
+            string uid = userLogin.userid;
+            Guid _uid = new Guid();
+            try
+            {
+                _uid = Guid.Parse(uid);
+                Users theUser = _usersServices.GetUser(_uid);
+                if (theUser != null)
+                {
+                    if (userLogin.confirmation == theUser.ConfirmationCode)
+                    {
+                        _usersServices.DeleteAllUserLogins(theUser.Id);
+                        Guid? loginId = _usersServices.AddLogin(new UsersLogins
+                        {
+                            Created = DateTime.Now,
+                            DeviceModel = userLogin.devicemodel,
+                            IMEI = userLogin.imei,
+                            User = theUser.Id
+                        });
+
+                        if (!theUser.IsActivated)
+                        {
+                            theUser.IsActivated = true;
+                            _usersServices.UpdateUser(theUser);
+                        }
+                        return Ok(loginId.ToString());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                return Ok("-1");
+            }
+            return Ok("-1");
+        }
+
+        [HttpPost]
+        public ActionResult loginCheck([FromBody] UserLogin userLogin)
+        {
+            Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
+            Guid? theResult = null;
+            bool status = true;
+
+            if (result == null)
+            {
+                status = false;
+                return Ok("-1");
+            }
+            if (result.IsDeleted == false && result.IsActivated)
+            {
+                UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
+                if (usrsLogin.IMEI != userLogin.imei)
+                {
+                    status = false;
+                }
+                if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                {
+                    status = false;
+                }
+            }
+            else
+            {
+                status = false;
+            }
+
+            if (status)
+            {
+                return Ok("ok");
+            }
+            else
+            {
+                return Ok("-1");
+            }
+
         }
 
 
@@ -106,17 +258,32 @@ namespace MinerAPP.UI.Controllers
         public ActionResult sendemail()
         {
             // create email message
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse("veronica.schaden@ethereal.email"));
-            email.To.Add(MailboxAddress.Parse("sarparast_r@yahoo.com"));
-            email.Subject = "Test Email from Sina";
-            email.Body = new TextPart(TextFormat.Html) { Text = "<h1>Hi</h1><p>salam</p>" };
+            //var email = new MimeMessage();
+            //email.From.Add(MailboxAddress.Parse("veronica.schaden@ethereal.email"));
+            //email.To.Add(MailboxAddress.Parse("sarparast_r@yahoo.com"));
+            //email.Subject = "Test Email from Sina";
+            //email.Body = new TextPart(TextFormat.Html) { Text = "<h1>Hi</h1><p>salam</p>" };
 
-            using var smtp = new SmtpClient();
-            smtp.Connect("smtp.ethereal.email",587,SecureSocketOptions.StartTls);
-            smtp.Authenticate("veronica.schaden@ethereal.email", "cUrGNwvSZXE9NJcEYz");
-            smtp.Send(email);
-            smtp.Disconnect(true);
+            //using var smtp = new SmtpClient();
+            //smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+            //smtp.Authenticate("veronica.schaden@ethereal.email", "cUrGNwvSZXE9NJcEYz");
+            //smtp.Send(email);
+            //smtp.Disconnect(true);
+            
+            //var email = new MimeMessage();
+            //email.From.Add(MailboxAddress.Parse("sina.developer@omanmultimedia.com"));
+            //email.To.Add(MailboxAddress.Parse("sarparast.s@gmail.com"));
+            //email.Subject = "Test Email from Sina";
+            //email.Body = new TextPart(TextFormat.Html) { Text = "<h1>Hi</h1><p>salam</p>" };
+
+            //using var smtp = new SmtpClient();
+            //smtp.Connect("mail.omanmultimedia.com", 587, SecureSocketOptions.StartTls);
+            //smtp.Authenticate("sina.developer@omanmultimedia.com", "Blueframe95!!");
+            //smtp.Send(email);
+            //smtp.Disconnect(true);
+
+            string[] arrs = { "12345" };
+            DependencyContainer.SendEmail("sarparast.s@gmail.com","My Subject", "Assets\\EmailTemplates\\RegConfirm.txt",arrs);
 
 
 

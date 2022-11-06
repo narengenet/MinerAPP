@@ -12,7 +12,7 @@ using MinerAPP.Infrastructure.Contexts;
 namespace MinerAPP.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221103135733_initial")]
+    [Migration("20221104123910_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,7 +87,7 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2a365a02-6a9c-4ce7-81df-0ac4ce3aea27"),
+                            Id = new Guid("7dbfe599-0cbd-45ea-8e9b-e11370f3b4d0"),
                             Cellphone = "00989394125130",
                             Email = "sina@yahoo.com",
                             Family = "Jouybari",
@@ -100,7 +100,7 @@ namespace MinerAPP.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bd104368-c8a3-4ede-bcc1-1777e97c614c"),
+                            Id = new Guid("9ed89181-426b-48a1-ae7d-e0129dc20e30"),
                             Cellphone = "00989111769591",
                             Email = "vinona@yahoo.com",
                             Family = "پردلان",
@@ -113,7 +113,7 @@ namespace MinerAPP.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("73b9f9d6-4d92-4007-99e4-85c466a11852"),
+                            Id = new Guid("f2b9d695-3fc6-43b5-b1a7-ead166311376"),
                             Cellphone = "00989166666666",
                             Email = "sep@yahoo.com",
                             Family = "یاراحمدی",
@@ -124,6 +124,43 @@ namespace MinerAPP.Infrastructure.Migrations
                             ProfileMediaURL = "uploads/2022/9/photo.jpg",
                             Username = "sepideh"
                         });
+                });
+
+            modelBuilder.Entity("MinerAPP.Core.Domain.UsersLogins", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeviceModel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IMEI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("User")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsersLogins");
                 });
 #pragma warning restore 612, 618
         }

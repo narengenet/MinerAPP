@@ -14,6 +14,7 @@ builder.Services.AddControllers();
 
 //builder.Services.AddScoped<IUsersRepository, UserRepository>();
 //builder.Services.AddScoped<IUsersServices, UsersServices>();
+builder.Services.AddRazorPages();
 builder.Services.AddIoCService();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
@@ -36,7 +37,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    SeedData.Initialize(services);
+    //SeedData.Initialize(services);
 }
 
 // Configure the HTTP request pipeline.

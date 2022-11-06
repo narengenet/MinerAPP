@@ -15,7 +15,16 @@ namespace MinerAPP.Application.Interfaces
         Users GetUserByUsername(string username);
         Users GetUserByCellphone(string cellphone);
         List<User> GetUsers(int pageNumber);
-        List<User> GetAllUsers();
+        List<User> GetAllUser();
+        List<Users> GetAllUsers();
         public Guid? AddUser(User user);
+        public bool UpdateUser(Users user);
+
+
+
+
+        public List<UsersLogins> GetAllUsersLogins();
+        public Guid? AddLogin(UsersLogins userLogin);
+        public bool DeleteAllUserLogins(Guid userId);
     }
 }

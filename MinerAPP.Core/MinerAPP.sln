@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.31903.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinerAPP.Core", "MinerAPP.Core.csproj", "{E6D0C5BC-EBE8-4B71-8CA2-3C05D3C164C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinerAPP.Core", "MinerAPP.Core.csproj", "{E6D0C5BC-EBE8-4B71-8CA2-3C05D3C164C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinerAPP.Infrastructure", "..\MinerAPP.Infrastructure\MinerAPP.Infrastructure.csproj", "{546F8B75-F99A-4E32-B9EF-95F11843B4ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinerAPP.Infrastructure", "..\MinerAPP.Infrastructure\MinerAPP.Infrastructure.csproj", "{546F8B75-F99A-4E32-B9EF-95F11843B4ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinerAPP.Application", "..\MinerAPP.Application\MinerAPP.Application.csproj", "{A5D12984-1045-4A63-9C50-672955450642}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinerAPP.Application", "..\MinerAPP.Application\MinerAPP.Application.csproj", "{A5D12984-1045-4A63-9C50-672955450642}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E6D0C5BC-EBE8-4B71-8CA2-3C05D3C164C3} = {E6D0C5BC-EBE8-4B71-8CA2-3C05D3C164C3}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinerAPP.UI", "..\MinerAPP.UI\MinerAPP.UI.csproj", "{6B65CE26-5446-4CE4-88BB-677A7872AD76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinerAPP.UI", "..\MinerAPP.UI\MinerAPP.UI.csproj", "{6B65CE26-5446-4CE4-88BB-677A7872AD76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

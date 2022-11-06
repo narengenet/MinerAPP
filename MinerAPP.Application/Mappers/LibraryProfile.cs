@@ -23,6 +23,8 @@ namespace MinerAPP.Application.Mappers
                 .ForMember(dest => dest.username, opt => opt.MapFrom(src => src.Username))
                 .ForMember(dest => dest.phone, opt => opt.MapFrom(src => src.Cellphone))
                 .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.devicemodel, opt => opt.Ignore())
+                .ForMember(dest => dest.imei, opt => opt.Ignore())
                 .ReverseMap();
         }
     }

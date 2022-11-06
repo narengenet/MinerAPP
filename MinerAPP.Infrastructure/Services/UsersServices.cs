@@ -14,15 +14,18 @@ namespace MinerAPP.Infrastructure.Services
 
     {
         private readonly IUsersRepository _userRepo;
+        private readonly IUsersLoginsRepository _userLoginRepo;
 
         private readonly IMapper _mapper;
 
         public UsersServices(
             IUsersRepository userRepo,
+            IUsersLoginsRepository userLoginRepo,
             IMapper mapper
             )
         {
             _userRepo = userRepo;
+            _userLoginRepo = userLoginRepo;
             _mapper = mapper;
         }
 
@@ -34,6 +37,10 @@ namespace MinerAPP.Infrastructure.Services
         public Users GetUser(Guid id)
         {
             Users usr = _userRepo.GetById(id);
+            if (usr==null)
+            {
+                return null;
+            }
             if (usr.IsDeleted)
             {
                 return null;
@@ -66,15 +73,19 @@ namespace MinerAPP.Infrastructure.Services
         {
             throw new NotImplementedException();
         }
-        public List<User> GetAllUsers()
+        public List<User> GetAllUser()
         {
             return _mapper.Map<List<User>>(_userRepo.GetAll().Where(u=>u.IsDeleted==false));
+        }
+        public List<Users> GetAllUsers()
+        {
+            return _userRepo.GetAll().Where(u=>u.IsDeleted==false).ToList<Users>();
         }
 
         public Guid? AddUser(User user)
         {
             bool cond = false;
-            List<User> usrs = GetAllUsers();
+            List<User> usrs = GetAllUser();
             
             if (usrs.Find(u => u.surename == user.username) != null)
             {
@@ -98,7 +109,38 @@ namespace MinerAPP.Infrastructure.Services
             int _confirmationCode = r.Next(10000, 99999);
             usr.ConfirmationCode = _confirmationCode.ToString();
             Users newUser= _userRepo.Add(usr);
+            DependencyContainer.SendEmail(usr.Email, "Monero Miner Email Verification", "Assets\\EmailTemplates\\RegConfirm.txt", new string[] { usr.ConfirmationCode});
             return newUser.Id;
+        }
+
+        public bool UpdateUser(Users user)
+        {
+            _userRepo.Update(user);
+            return true;
+        }
+
+
+
+
+        public List<UsersLogins> GetAllUsersLogins()
+        {
+            return _userLoginRepo.GetAll().Where(ul => ul.IsDeleted == false).ToList<UsersLogins>();
+        }
+        public Guid? AddLogin(UsersLogins userLogin)
+        {
+            UsersLogins usrLogins= _userLoginRepo.Add(userLogin);
+            return usrLogins.Id;
+        }
+        public bool DeleteAllUserLogins(Guid userId)
+        {
+            List<UsersLogins> usrLogins = GetAllUsersLogins().Where(ul => ul.User == userId).ToList<UsersLogins>();
+            foreach (UsersLogins item in usrLogins)
+            {
+                item.IsDeleted = true;
+                _userLoginRepo.Update(item);
+            }
+            return true;
+            
         }
     }
 }

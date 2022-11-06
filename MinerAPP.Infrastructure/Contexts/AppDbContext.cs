@@ -17,6 +17,7 @@ namespace MinerAPP.Infrastructure.Contexts
 
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<UsersLogins> UsersLogins{ get; set; }
 
 
 
