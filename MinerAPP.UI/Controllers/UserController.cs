@@ -99,7 +99,7 @@ namespace MinerAPP.UI.Controllers
             {
                 return Ok("-1");
             }
-            
+
             return Ok(result.ToString());
         }
         [HttpPost]
@@ -254,6 +254,62 @@ namespace MinerAPP.UI.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult getUserData([FromBody] UserLogin userReq)
+        {
+            Users theUser = _usersServices.GetUser(Guid.Parse(userReq.userid));
+            if (theUser != null)
+            {
+                UsersLogins usrLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.Id == Guid.Parse(userReq.loginid) && ul.IMEI==userReq.imei && ul.DeviceModel==userReq.devicemodel).FirstOrDefault();
+                if (usrLogin != null)
+                {
+                    User result = new User
+                    {
+                        imei = theUser.WalletAddress,
+                        name = theUser.Name,
+                        surename = theUser.Family,
+                        username = theUser.Username,
+                        email = theUser.Email,
+                        phone = theUser.Cellphone
+                    };
+                    return Ok(result);
+                }
+            }
+            return Ok(null);
+        }
+
+        [HttpPost]
+        public ActionResult updateUser([FromBody] User userUpdate)
+        {
+            string lid = Request.Headers["data1"].ToString();
+            string id = Request.Headers["data2"].ToString();
+            string wallet = Request.Headers["data3"].ToString();
+
+            Users theUser = _usersServices.GetUser(Guid.Parse(id));
+            if (theUser != null)
+            {
+                UsersLogins usrLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.Id == Guid.Parse(lid) && ul.IMEI == userUpdate.imei && ul.DeviceModel == userUpdate.devicemodel).FirstOrDefault();
+                if (usrLogin != null)
+                {
+
+                    theUser.Name = userUpdate.name;
+                    theUser.Family = userUpdate.surename;
+                    theUser.Email = userUpdate.email;
+                    theUser.Cellphone = userUpdate.phone;
+                    theUser.WalletAddress = wallet;
+                    theUser.LastModified = DateTime.Now;
+
+                    _usersServices.UpdateUser(theUser);
+                    return Ok("ok");
+                }
+            }
+
+            return Ok("-1");
+
+        }
+
+
+        
 
         public ActionResult sendemail()
         {
@@ -269,7 +325,7 @@ namespace MinerAPP.UI.Controllers
             //smtp.Authenticate("veronica.schaden@ethereal.email", "cUrGNwvSZXE9NJcEYz");
             //smtp.Send(email);
             //smtp.Disconnect(true);
-            
+
             //var email = new MimeMessage();
             //email.From.Add(MailboxAddress.Parse("sina.developer@omanmultimedia.com"));
             //email.To.Add(MailboxAddress.Parse("sarparast.s@gmail.com"));
@@ -283,7 +339,7 @@ namespace MinerAPP.UI.Controllers
             //smtp.Disconnect(true);
 
             string[] arrs = { "12345" };
-            DependencyContainer.SendEmail("sarparast.s@gmail.com","My Subject", "Assets\\EmailTemplates\\RegConfirm.txt",arrs);
+            DependencyContainer.SendEmail("sarparast.s@gmail.com", "My Subject", "Assets\\EmailTemplates\\RegConfirm.txt", arrs);
 
 
 
