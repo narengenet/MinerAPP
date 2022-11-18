@@ -17,14 +17,23 @@ namespace MinerAPP.Application.Interfaces
         List<User> GetUsers(int pageNumber);
         List<User> GetAllUser();
         List<Users> GetAllUsers();
-        public Guid? AddUser(User user);
-        public bool UpdateUser(Users user);
+        Guid? AddUser(User user);
+        bool UpdateUser(Users user);
 
 
 
 
-        public List<UsersLogins> GetAllUsersLogins();
-        public Guid? AddLogin(UsersLogins userLogin);
-        public bool DeleteAllUserLogins(Guid userId);
+        List<UsersLogins> GetAllUsersLogins();
+        Guid? AddLogin(UsersLogins userLogin);
+        bool DeleteAllUserLogins(Guid userId);
+
+        List<StaticDictionaries> GetAllStaticDics();
+        
+        
+        
+        List<Transactions> GetAllTransactions();
+        Transactions AddTransaction(Transactions transaction);
+
+
     }
 }

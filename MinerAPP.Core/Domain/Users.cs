@@ -17,7 +17,7 @@ namespace MinerAPP.Core.Domain
         public string Cellphone { get; set; }
         public bool IsActivated { get; set; }
         public string? ConfirmationCode { get; set; }
-        public long Points { get; set; }
+        public long Balance { get; set; }
         public string? ProfileMediaURL { get; set; }
         public string Email { get; set; }
         public string? WalletAddress { get; set; }

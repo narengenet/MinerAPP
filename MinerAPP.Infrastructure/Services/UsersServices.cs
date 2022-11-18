@@ -15,17 +15,24 @@ namespace MinerAPP.Infrastructure.Services
     {
         private readonly IUsersRepository _userRepo;
         private readonly IUsersLoginsRepository _userLoginRepo;
+        private readonly IStaticDictionariesRepository _staticDicsRepo;
+        private readonly ITransactionsRepository _transacRepo;
 
         private readonly IMapper _mapper;
 
         public UsersServices(
             IUsersRepository userRepo,
             IUsersLoginsRepository userLoginRepo,
+            IStaticDictionariesRepository staticDicRepo,
+            ITransactionsRepository transacRepo,
             IMapper mapper
             )
         {
             _userRepo = userRepo;
             _userLoginRepo = userLoginRepo;
+            _staticDicsRepo = staticDicRepo;
+            _transacRepo = transacRepo;
+            
             _mapper = mapper;
         }
 
@@ -141,6 +148,20 @@ namespace MinerAPP.Infrastructure.Services
             }
             return true;
             
+        }
+
+        List<StaticDictionaries> IUsersServices.GetAllStaticDics()
+        {
+            return _staticDicsRepo.GetAll().Where(d=>d.IsDeleted==false).ToList<StaticDictionaries>();
+        }
+
+        public List<Transactions> GetAllTransactions()
+        {
+            return _transacRepo.GetAll().Where(d => d.IsDeleted == false).ToList<Transactions>();
+        }
+        public Transactions AddTransaction(Transactions transaction)
+        {
+            return _transacRepo.Add(transaction);
         }
     }
 }

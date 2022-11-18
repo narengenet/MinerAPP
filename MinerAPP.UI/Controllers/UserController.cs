@@ -8,6 +8,7 @@ using MinerAPP.Application.Interfaces;
 using MinerAPP.Core.Domain;
 using MailKit.Net.Smtp;
 using MinerAPP.Infrastructure;
+using AutoMapper;
 
 namespace MinerAPP.UI.Controllers
 {
@@ -15,9 +16,12 @@ namespace MinerAPP.UI.Controllers
     {
         private readonly IUsersServices _usersServices;
 
-        public UserController(IUsersServices usersServices)
+        private readonly IMapper _mapper;
+
+        public UserController(IUsersServices usersServices, IMapper mapper)
         {
             _usersServices = usersServices;
+            _mapper = mapper;
         }
         // GET: UserController
         public ActionResult Index()
@@ -253,6 +257,260 @@ namespace MinerAPP.UI.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult checkDeposite([FromBody] UserLogin userLogin)
+        {
+            Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
+            Guid? theResult = null;
+            bool status = true;
+
+            if (result == null)
+            {
+                status = false;
+                return Ok(null);
+            }
+            if (result.IsDeleted == false && result.IsActivated)
+            {
+                UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
+                if (usrsLogin.IMEI != userLogin.imei)
+                {
+                    status = false;
+                }
+                if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                {
+                    status = false;
+                }
+            }
+            else
+            {
+                status = false;
+            }
+
+            if (status)
+            {
+                string theQR = _usersServices.GetAllStaticDics().Where(d => d.TheName == "theqr").First().TheValue;
+                string theWallet = _usersServices.GetAllStaticDics().Where(d => d.TheName == "thewallet").First().TheValue;
+
+                DoubleStrings rslt = new DoubleStrings { data1 = theQR, data2 = theWallet };
+                return Ok(rslt);
+            }
+            else
+            {
+                return Ok(null);
+            }
+
+        }
+        
+        [HttpPost]
+        public ActionResult checkWithdraw([FromBody] UserLogin userLogin)
+        {
+            Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
+            Guid? theResult = null;
+            bool status = true;
+
+            if (result == null)
+            {
+                status = false;
+                return Ok(null);
+            }
+            if (result.IsDeleted == false && result.IsActivated)
+            {
+                UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
+                if (usrsLogin.IMEI != userLogin.imei)
+                {
+                    status = false;
+                }
+                if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                {
+                    status = false;
+                }
+            }
+            else
+            {
+                status = false;
+            }
+
+            if (status)
+            {
+                string theWallet = result.WalletAddress;
+
+                DoubleStrings rslt = new DoubleStrings { data1 = "", data2 = theWallet };
+                return Ok(rslt);
+            }
+            else
+            {
+                return Ok(null);
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult addDeposit([FromBody] UserLogin userLogin)
+        {
+            int amountData = Convert.ToInt32(Request.Headers["amount"]);
+            string hashData = Request.Headers["hash"];
+
+            Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
+            Guid? theResult = null;
+            bool status = true;
+
+            if (result == null)
+            {
+                status = false;
+                return Ok("-1");
+            }
+            if (result.IsDeleted == false && result.IsActivated)
+            {
+                UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
+                if (usrsLogin.IMEI != userLogin.imei)
+                {
+                    status = false;
+                }
+                if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                {
+                    status = false;
+                }
+            }
+            else
+            {
+                status = false;
+            }
+
+            if (status)
+            {
+                _usersServices.AddTransaction(new Transactions{
+                    Amount = amountData,
+                    UserID = result.Id,
+                    TheHash = hashData,
+                    Confirmed = false,
+                    IsDeposit=true,
+                    TheWallet="",
+                    Created = DateTime.Now
+                });
+
+                return Ok("ok");
+            }
+            else
+            {
+                return Ok("-1");
+            }
+
+        }
+        
+        [HttpPost]
+        public ActionResult addWithdraw([FromBody] UserLogin userLogin)
+        {
+            int amountData = Convert.ToInt32(Request.Headers["amount"]);
+            string walletData = Request.Headers["wallet"];
+
+            Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
+            Guid? theResult = null;
+            bool status = true;
+
+            if (result == null)
+            {
+                status = false;
+                return Ok("-1");
+            }
+            if (result.IsDeleted == false && result.IsActivated)
+            {
+                UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
+                if (usrsLogin.IMEI != userLogin.imei)
+                {
+                    status = false;
+                }
+                if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                {
+                    status = false;
+                }
+            }
+            else
+            {
+                status = false;
+            }
+
+            if (status)
+            {
+                _usersServices.AddTransaction(new Transactions{
+                    Amount = amountData,
+                    UserID = result.Id,
+                    TheHash = "",
+                    Confirmed = false,
+                    IsDeposit=false,
+                    TheWallet=walletData,
+                    Created = DateTime.Now
+                });
+
+                return Ok("ok");
+            }
+            else
+            {
+                return Ok("-1");
+            }
+
+        }
+        
+        
+        [HttpGet]
+        public ActionResult getTransactions([FromBody] UserLogin userLogin)
+        {
+            string imei = Request.Headers["imei"];
+            string devicemodel = Request.Headers["device"];
+            string userid = Request.Headers["uid"];
+            string userlid = Request.Headers["ulid"];
+            int page = Convert.ToInt32(Request.Headers["page"]);
+
+
+
+
+            Users result = _usersServices.GetUser(Guid.Parse(userid));
+            Guid? theResult = null;
+            bool status = true;
+
+            if (result == null)
+            {
+                status = false;
+                return Ok(null);
+            }
+            if (result.IsDeleted == false && result.IsActivated)
+            {
+                UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == Guid.Parse(userid)).FirstOrDefault();
+                if (usrsLogin.IMEI != imei)
+                {
+                    status = false;
+                }
+                if (usrsLogin.DeviceModel != devicemodel)
+                {
+                    status = false;
+                }
+            }
+            else
+            {
+                status = false;
+            }
+
+            if (status)
+            {
+                List<Transaction> allTransactions= _mapper.Map<List<Transaction>>(_usersServices.GetAllTransactions().Where(t => t.UserID == Guid.Parse(userid)).Skip(8*page).Take(8).ToList<Transactions>());
+
+
+                if (allTransactions.Count>0)
+                {
+                    return Ok(allTransactions);
+
+                }
+                else
+                {
+                    return Ok(null);
+                }
+            }
+            else
+            {
+                return Ok(null);
+            }
+
+        }
+
 
         [HttpPost]
         public ActionResult getUserData([FromBody] UserLogin userReq)
@@ -260,7 +518,7 @@ namespace MinerAPP.UI.Controllers
             Users theUser = _usersServices.GetUser(Guid.Parse(userReq.userid));
             if (theUser != null)
             {
-                UsersLogins usrLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.Id == Guid.Parse(userReq.loginid) && ul.IMEI==userReq.imei && ul.DeviceModel==userReq.devicemodel).FirstOrDefault();
+                UsersLogins usrLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.Id == Guid.Parse(userReq.loginid) && ul.IMEI == userReq.imei && ul.DeviceModel == userReq.devicemodel).FirstOrDefault();
                 if (usrLogin != null)
                 {
                     User result = new User
@@ -270,7 +528,8 @@ namespace MinerAPP.UI.Controllers
                         surename = theUser.Family,
                         username = theUser.Username,
                         email = theUser.Email,
-                        phone = theUser.Cellphone
+                        phone = theUser.Cellphone,
+                        balance=theUser.Balance.ToString()
                     };
                     return Ok(result);
                 }
@@ -309,7 +568,7 @@ namespace MinerAPP.UI.Controllers
         }
 
 
-        
+
 
         public ActionResult sendemail()
         {

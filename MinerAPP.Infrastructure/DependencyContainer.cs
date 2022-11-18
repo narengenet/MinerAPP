@@ -22,24 +22,26 @@ namespace MinerAPP.Infrastructure
         {
             services.AddScoped<IUsersRepository, UserRepository>();
             services.AddScoped<IUsersLoginsRepository, UsersLoginsRepository>();
+            services.AddScoped<IStaticDictionariesRepository, StaticDictionariesRepository>();
+            services.AddScoped<ITransactionsRepository, TransactionsRepository>();
 
             services.AddScoped<IUsersServices, UsersServices>();
         }
 
         public static void SendEmail(string toEmail, string subject, string templatePath, string[] replacedParams = null)
         {
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse("sina.developer@omanmultimedia.com"));
-            email.To.Add(MailboxAddress.Parse(toEmail));
-            email.Subject = subject;
-            string body = ReadTemplateHtml(templatePath, replacedParams);
-            email.Body = new TextPart(TextFormat.Html) { Text = body };
+            //var email = new MimeMessage();
+            //email.From.Add(MailboxAddress.Parse("sina.developer@omanmultimedia.com"));
+            //email.To.Add(MailboxAddress.Parse(toEmail));
+            //email.Subject = subject;
+            //string body = ReadTemplateHtml(templatePath, replacedParams);
+            //email.Body = new TextPart(TextFormat.Html) { Text = body };
 
-            using var smtp = new SmtpClient();
-            smtp.Connect("mail.omanmultimedia.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("sina.developer@omanmultimedia.com", "Blueframe95!!");
-            smtp.Send(email);
-            smtp.Disconnect(true);
+            //using var smtp = new SmtpClient();
+            //smtp.Connect("mail.omanmultimedia.com", 587, SecureSocketOptions.StartTls);
+            //smtp.Authenticate("sina.developer@omanmultimedia.com", "Blueframe95!!");
+            //smtp.Send(email);
+            //smtp.Disconnect(true);
         }
 
         public static string ReadTemplateHtml(string templatePath, string[] replacedParams = null)

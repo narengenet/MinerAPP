@@ -26,6 +26,14 @@ namespace MinerAPP.Application.Mappers
                 .ForMember(dest => dest.devicemodel, opt => opt.Ignore())
                 .ForMember(dest => dest.imei, opt => opt.Ignore())
                 .ReverseMap();
+            
+            CreateMap<Transactions, Transaction>()
+                .ForMember(dest => dest.amount, opt => opt.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.confirmed, opt => opt.MapFrom(src => src.Confirmed))
+                .ForMember(dest => dest.date, opt => opt.MapFrom(src => src.Created))
+                .ForMember(dest => dest.hash, opt => opt.MapFrom(src => src.TheHash))
+                .ForMember(dest => dest.isdeposit, opt => opt.MapFrom(src => src.IsDeposit))
+                .ReverseMap();
         }
     }
 }

@@ -12,7 +12,7 @@ using MinerAPP.Infrastructure.Contexts;
 namespace MinerAPP.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221104123910_initial")]
+    [Migration("20221118075043_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,11 +24,110 @@ namespace MinerAPP.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("MinerAPP.Core.Domain.StaticDictionaries", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TheName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TheValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StaticDictionaries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("5323db4d-ee7d-4772-a36d-e332b3caf16d"),
+                            IsDeleted = false,
+                            TheName = "theqr",
+                            TheValue = "https://localhost:7249/images/sina.jpg"
+                        },
+                        new
+                        {
+                            Id = new Guid("ca96c0aa-7e62-4602-9919-d83f09906568"),
+                            IsDeleted = false,
+                            TheName = "thewallet",
+                            TheValue = "TJ1000000000000000000000000000000"
+                        });
+                });
+
+            modelBuilder.Entity("MinerAPP.Core.Domain.Transactions", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeposit")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TheHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TheWallet")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transactions");
+                });
+
             modelBuilder.Entity("MinerAPP.Core.Domain.Users", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Balance")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Cellphone")
                         .IsRequired()
@@ -67,9 +166,6 @@ namespace MinerAPP.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Points")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("ProfileMediaURL")
                         .HasColumnType("nvarchar(max)");
 
@@ -87,42 +183,17 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7dbfe599-0cbd-45ea-8e9b-e11370f3b4d0"),
+                            Id = new Guid("4bab4105-c8e0-47aa-97ba-1458ea86972d"),
+                            Balance = 0L,
                             Cellphone = "00989394125130",
-                            Email = "sina@yahoo.com",
+                            Email = "sarparast_r@yahoo.com",
                             Family = "Jouybari",
                             IsActivated = false,
                             IsDeleted = false,
                             Name = "Sina",
-                            Points = 0L,
                             ProfileMediaURL = "uploads/2022/9/sina2.jpg",
-                            Username = "sinful"
-                        },
-                        new
-                        {
-                            Id = new Guid("9ed89181-426b-48a1-ae7d-e0129dc20e30"),
-                            Cellphone = "00989111769591",
-                            Email = "vinona@yahoo.com",
-                            Family = "پردلان",
-                            IsActivated = false,
-                            IsDeleted = false,
-                            Name = "محسن",
-                            Points = 0L,
-                            ProfileMediaURL = "uploads/2022/9/99.jpg",
-                            Username = "vinona"
-                        },
-                        new
-                        {
-                            Id = new Guid("f2b9d695-3fc6-43b5-b1a7-ead166311376"),
-                            Cellphone = "00989166666666",
-                            Email = "sep@yahoo.com",
-                            Family = "یاراحمدی",
-                            IsActivated = false,
-                            IsDeleted = false,
-                            Name = "سپیده",
-                            Points = 0L,
-                            ProfileMediaURL = "uploads/2022/9/photo.jpg",
-                            Username = "sepideh"
+                            Username = "sinful",
+                            WalletAddress = "TJ12333333333333323333333333333333"
                         });
                 });
 

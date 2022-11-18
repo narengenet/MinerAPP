@@ -18,17 +18,25 @@ namespace MinerAPP.Infrastructure.Contexts
 
         public DbSet<Users> Users { get; set; }
         public DbSet<UsersLogins> UsersLogins{ get; set; }
+        public DbSet<StaticDictionaries> StaticDictionaries{ get; set; }
+        public DbSet<Transactions> Transactions{ get; set; }
 
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Users sina = new Users { Id = Guid.NewGuid(), Name = "Sina", Family = "Jouybari", Cellphone = "00989394125130", Email="sina@yahoo.com", Username = "sinful", ProfileMediaURL = "uploads/2022/9/sina2.jpg" };
-            Users mohsen = new Users { Id = Guid.NewGuid(), Name = "محسن", Family = "پردلان", Cellphone = "00989111769591", Username = "vinona", Email="vinona@yahoo.com", ProfileMediaURL = "uploads/2022/9/99.jpg" };
-            Users sepideh = new Users { Id = Guid.NewGuid(), Name = "سپیده", Family = "یاراحمدی", Cellphone = "00989166666666", Username = "sepideh", Email="sep@yahoo.com", ProfileMediaURL = "uploads/2022/9/photo.jpg" };
+            Users sina = new Users { Id = Guid.NewGuid(), Name = "Sina", Family = "Jouybari", Cellphone = "00989394125130", Email="sarparast_r@yahoo.com", Username = "sinful", ProfileMediaURL = "uploads/2022/9/sina2.jpg", WalletAddress="TJ12333333333333323333333333333333" };
+            //Users mohsen = new Users { Id = Guid.NewGuid(), Name = "محسن", Family = "پردلان", Cellphone = "00989111769591", Username = "vinona", Email="vinona@yahoo.com", ProfileMediaURL = "uploads/2022/9/99.jpg" };
+            //Users sepideh = new Users { Id = Guid.NewGuid(), Name = "سپیده", Family = "یاراحمدی", Cellphone = "00989166666666", Username = "sepideh", Email="sep@yahoo.com", ProfileMediaURL = "uploads/2022/9/photo.jpg" };
             modelBuilder.Entity<Users>().HasData(sina);
-            modelBuilder.Entity<Users>().HasData(mohsen);
-            modelBuilder.Entity<Users>().HasData(sepideh);
+            //modelBuilder.Entity<Users>().HasData(mohsen);
+            //modelBuilder.Entity<Users>().HasData(sepideh);
+
+
+            StaticDictionaries theQR = new StaticDictionaries { Id = Guid.NewGuid(), TheName = "theqr", TheValue = "https://localhost:7249/images/sina.jpg" };
+            StaticDictionaries theWallet = new StaticDictionaries { Id = Guid.NewGuid(), TheName = "thewallet", TheValue = "TJ1000000000000000000000000000000" };
+            modelBuilder.Entity<StaticDictionaries>().HasData(theQR);
+            modelBuilder.Entity<StaticDictionaries>().HasData(theWallet);
             //modelBuilder.Entity<Advertise>().HasData(new Advertise { AdvertiseID=1,Owner=sina, Caption="کیش کدپولو", Name="کیش", IsVideo=true, LikeReward=2, ViewReward=4, ViewQuota=100, RemainedViewQuota=100, MediaSourceURL= "uploads/2022/9/1-56192-4_6008031941360618419.MP4"});
             //modelBuilder.Entity<Advertise>().HasData(new Advertise { AdvertiseID=2,Owner=mohsen, Caption="کیش کدپولو", Name="کیش", IsVideo=false, LikeReward=2, ViewReward=4, ViewQuota=100, RemainedViewQuota=100, MediaSourceURL= "uploads/2022/9/1-53754-1.mp4_snapshot_01.04_[2022.05.26_09.50.52].jpg" });
             //modelBuilder.Entity<Advertise>().HasData(new Advertise { AdvertiseID=3,Owner=sepideh, Caption="کیش کدپولو", Name="کیش", IsVideo=false, LikeReward=2, ViewReward=4, ViewQuota=100, RemainedViewQuota=100, MediaSourceURL= "uploads/2022/9/1582619178545.jpg" });
