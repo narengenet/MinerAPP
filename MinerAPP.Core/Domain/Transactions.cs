@@ -10,7 +10,7 @@ namespace MinerAPP.Core.Domain
     public class Transactions : AuditableBaseEntity
     {
         public Guid UserID { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
         public string TheHash { get; set; }
         public string TheWallet { get; set; }
         public bool Confirmed { get; set; }

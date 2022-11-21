@@ -58,17 +58,24 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5323db4d-ee7d-4772-a36d-e332b3caf16d"),
+                            Id = new Guid("837ac619-3241-403d-b390-9545e47fa803"),
                             IsDeleted = false,
                             TheName = "theqr",
                             TheValue = "https://localhost:7249/images/sina.jpg"
                         },
                         new
                         {
-                            Id = new Guid("ca96c0aa-7e62-4602-9919-d83f09906568"),
+                            Id = new Guid("9c7a0e64-879f-4fcf-8046-217b448327b3"),
                             IsDeleted = false,
                             TheName = "thewallet",
                             TheValue = "TJ1000000000000000000000000000000"
+                        },
+                        new
+                        {
+                            Id = new Guid("182e0058-649a-4efb-89cf-2b158fcd7150"),
+                            IsDeleted = false,
+                            TheName = "inviterreward",
+                            TheValue = "0.1"
                         });
                 });
 
@@ -78,8 +85,8 @@ namespace MinerAPP.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<bool>("Confirmed")
                         .HasColumnType("bit");
@@ -124,8 +131,8 @@ namespace MinerAPP.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("Balance")
-                        .HasColumnType("bigint");
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
 
                     b.Property<string>("Cellphone")
                         .IsRequired()
@@ -147,6 +154,9 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.Property<string>("Family")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("Inviter")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActivated")
                         .HasColumnType("bit");
@@ -181,8 +191,8 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4bab4105-c8e0-47aa-97ba-1458ea86972d"),
-                            Balance = 0L,
+                            Id = new Guid("6d0f2b19-8df9-4588-abd7-dc53f807697d"),
+                            Balance = 0.0,
                             Cellphone = "00989394125130",
                             Email = "sarparast_r@yahoo.com",
                             Family = "Jouybari",

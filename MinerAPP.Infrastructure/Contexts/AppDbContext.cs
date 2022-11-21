@@ -35,8 +35,10 @@ namespace MinerAPP.Infrastructure.Contexts
 
             StaticDictionaries theQR = new StaticDictionaries { Id = Guid.NewGuid(), TheName = "theqr", TheValue = "https://localhost:7249/images/sina.jpg" };
             StaticDictionaries theWallet = new StaticDictionaries { Id = Guid.NewGuid(), TheName = "thewallet", TheValue = "TJ1000000000000000000000000000000" };
+            StaticDictionaries inviterReward = new StaticDictionaries { Id = Guid.NewGuid(), TheName = "inviterreward", TheValue = "0.1" };
             modelBuilder.Entity<StaticDictionaries>().HasData(theQR);
             modelBuilder.Entity<StaticDictionaries>().HasData(theWallet);
+            modelBuilder.Entity<StaticDictionaries>().HasData(inviterReward);
             //modelBuilder.Entity<Advertise>().HasData(new Advertise { AdvertiseID=1,Owner=sina, Caption="کیش کدپولو", Name="کیش", IsVideo=true, LikeReward=2, ViewReward=4, ViewQuota=100, RemainedViewQuota=100, MediaSourceURL= "uploads/2022/9/1-56192-4_6008031941360618419.MP4"});
             //modelBuilder.Entity<Advertise>().HasData(new Advertise { AdvertiseID=2,Owner=mohsen, Caption="کیش کدپولو", Name="کیش", IsVideo=false, LikeReward=2, ViewReward=4, ViewQuota=100, RemainedViewQuota=100, MediaSourceURL= "uploads/2022/9/1-53754-1.mp4_snapshot_01.04_[2022.05.26_09.50.52].jpg" });
             //modelBuilder.Entity<Advertise>().HasData(new Advertise { AdvertiseID=3,Owner=sepideh, Caption="کیش کدپولو", Name="کیش", IsVideo=false, LikeReward=2, ViewReward=4, ViewQuota=100, RemainedViewQuota=100, MediaSourceURL= "uploads/2022/9/1582619178545.jpg" });

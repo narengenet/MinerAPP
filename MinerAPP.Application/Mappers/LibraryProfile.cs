@@ -25,6 +25,8 @@ namespace MinerAPP.Application.Mappers
                 .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.devicemodel, opt => opt.Ignore())
                 .ForMember(dest => dest.imei, opt => opt.Ignore())
+                .ForMember(dest => dest.balance, opt => opt.Ignore())
+                .ForMember(dest => dest.inviterid, opt => opt.Ignore())
                 .ReverseMap();
             
             CreateMap<Transactions, Transaction>()

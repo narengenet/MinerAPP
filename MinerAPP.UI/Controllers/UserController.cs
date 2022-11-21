@@ -94,10 +94,26 @@ namespace MinerAPP.UI.Controllers
             }
 
         }
+        public ActionResult checkinviterusername(string id)
+        {
+            User usr = _usersServices.GetAllUser().Where(u => u.username == id).FirstOrDefault();
+            if (usr == null)
+            {
+                return Ok("-1");
+            }
+            else
+            {
+                return Ok("ok");
+            }
+
+        }
 
         [HttpPost]
         public ActionResult registerClient([FromBody] User newUser)
         {
+            string inviterid = Request.Headers["inviter"];
+            newUser.inviterid = inviterid == "-1" ? null : inviterid;
+
             Guid? result = _usersServices.AddUser(newUser);
             if (result == null)
             {
@@ -232,13 +248,20 @@ namespace MinerAPP.UI.Controllers
             if (result.IsDeleted == false && result.IsActivated)
             {
                 UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
-                if (usrsLogin.IMEI != userLogin.imei)
+                if (usrsLogin != null)
                 {
-                    status = false;
+                    if (usrsLogin.IMEI != userLogin.imei)
+                    {
+                        status = false;
+                    }
+                    if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                    {
+                        status = false;
+                    }
                 }
-                if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                else
                 {
-                    status = false;
+                    status=false;
                 }
             }
             else
@@ -491,7 +514,7 @@ namespace MinerAPP.UI.Controllers
 
             if (status)
             {
-                List<Transaction> allTransactions= _mapper.Map<List<Transaction>>(_usersServices.GetAllTransactions().Where(t => t.UserID == Guid.Parse(userid)).Skip(8*page).Take(8).ToList<Transactions>());
+                List<Transaction> allTransactions= _mapper.Map<List<Transaction>>(_usersServices.GetAllTransactions().Where(t => t.UserID == Guid.Parse(userid)).OrderByDescending(t=>t.Created).Skip(8*page).Take(8).ToList<Transactions>());
 
 
                 if (allTransactions.Count>0)
@@ -512,6 +535,21 @@ namespace MinerAPP.UI.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult checkWalletBalance([FromBody] UserLogin userReq)
+        {
+            Users theUser = _usersServices.GetUser(Guid.Parse(userReq.userid));
+            if (theUser != null)
+            {
+                UsersLogins usrLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.Id == Guid.Parse(userReq.loginid) && ul.IMEI == userReq.imei && ul.DeviceModel == userReq.devicemodel).FirstOrDefault();
+                if (usrLogin != null)
+                {
+                    return Ok(theUser.Balance+"$");
+                }
+            }
+            return Ok("-1");
+        }
+        
         [HttpPost]
         public ActionResult getUserData([FromBody] UserLogin userReq)
         {
