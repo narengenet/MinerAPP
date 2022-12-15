@@ -12,7 +12,7 @@ using MinerAPP.Infrastructure.Contexts;
 namespace MinerAPP.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221120231612_initial")]
+    [Migration("20221204231054_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,24 +60,52 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("837ac619-3241-403d-b390-9545e47fa803"),
+                            Id = new Guid("cb2136e7-aa62-458a-8315-a34134c9ffd9"),
                             IsDeleted = false,
                             TheName = "theqr",
                             TheValue = "https://localhost:7249/images/sina.jpg"
                         },
                         new
                         {
-                            Id = new Guid("9c7a0e64-879f-4fcf-8046-217b448327b3"),
+                            Id = new Guid("ad1e5744-b267-420b-b680-c19bad74ef30"),
                             IsDeleted = false,
                             TheName = "thewallet",
                             TheValue = "TJ1000000000000000000000000000000"
                         },
                         new
                         {
-                            Id = new Guid("182e0058-649a-4efb-89cf-2b158fcd7150"),
+                            Id = new Guid("4256d06b-8fce-4dd7-992d-5fe129ea2478"),
                             IsDeleted = false,
                             TheName = "inviterreward",
                             TheValue = "0.1"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b46cd67-d90c-4942-bb2c-49c65fcb8ccd"),
+                            IsDeleted = false,
+                            TheName = "deposithelp",
+                            TheValue = "Deposit Helpppppppppppppppppp"
+                        },
+                        new
+                        {
+                            Id = new Guid("cdecaac4-fc52-43ff-a64b-b9ce2ca7778f"),
+                            IsDeleted = false,
+                            TheName = "withdrawhelp",
+                            TheValue = "Withdraw Helpppppppppppppppppp"
+                        },
+                        new
+                        {
+                            Id = new Guid("e487d40b-3ccd-48d8-af00-eafbbf30060a"),
+                            IsDeleted = false,
+                            TheName = "transactionhelp",
+                            TheValue = "Transaction Helpppppppppppppppppp"
+                        },
+                        new
+                        {
+                            Id = new Guid("2cccba59-d810-4851-980f-fb11fed326b2"),
+                            IsDeleted = false,
+                            TheName = "accounthelp",
+                            TheValue = "Account Helpppppppppppppppppp"
                         });
                 });
 
@@ -193,7 +221,7 @@ namespace MinerAPP.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6d0f2b19-8df9-4588-abd7-dc53f807697d"),
+                            Id = new Guid("84020544-b6ce-4c4f-9a4f-d583484ba67e"),
                             Balance = 0.0,
                             Cellphone = "00989394125130",
                             Email = "sarparast_r@yahoo.com",

@@ -129,6 +129,7 @@ namespace MinerAPP.Infrastructure.Services
             Random r = new Random();
             int _confirmationCode = r.Next(10000, 99999);
             usr.ConfirmationCode = _confirmationCode.ToString();
+            usr.Created = DateTime.Now;
             Users newUser = _userRepo.Add(usr);
             DependencyContainer.SendEmail(usr.Email, "Monero Miner Email Verification", "Assets\\EmailTemplates\\RegConfirm.txt", new string[] { usr.ConfirmationCode });
             return newUser.Id;
@@ -176,6 +177,13 @@ namespace MinerAPP.Infrastructure.Services
         public Transactions AddTransaction(Transactions transaction)
         {
             return _transacRepo.Add(transaction);
+        }
+
+        public void UpdateLastUserActivity(Guid userLoginId)
+        {
+            UsersLogins usrLogin= _userLoginRepo.GetById(userLoginId);
+            usrLogin.LastModified = DateTime.Now;
+            _userLoginRepo.Update(usrLogin);
         }
     }
 }

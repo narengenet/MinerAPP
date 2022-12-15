@@ -26,6 +26,7 @@ namespace MinerAPP.Application.Interfaces
         List<UsersLogins> GetAllUsersLogins();
         Guid? AddLogin(UsersLogins userLogin);
         bool DeleteAllUserLogins(Guid userId);
+        void UpdateLastUserActivity(Guid userLoginId);
 
         List<StaticDictionaries> GetAllStaticDics();
         

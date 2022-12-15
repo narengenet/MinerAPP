@@ -100,15 +100,19 @@ namespace MinerAPP.Infrastructure.Migrations
                 columns: new[] { "Id", "Created", "CreatedBy", "IsDeleted", "LastModified", "LastModifiedBy", "TheName", "TheValue" },
                 values: new object[,]
                 {
-                    { new Guid("182e0058-649a-4efb-89cf-2b158fcd7150"), null, null, false, null, null, "inviterreward", "0.1" },
-                    { new Guid("837ac619-3241-403d-b390-9545e47fa803"), null, null, false, null, null, "theqr", "https://localhost:7249/images/sina.jpg" },
-                    { new Guid("9c7a0e64-879f-4fcf-8046-217b448327b3"), null, null, false, null, null, "thewallet", "TJ1000000000000000000000000000000" }
+                    { new Guid("0b46cd67-d90c-4942-bb2c-49c65fcb8ccd"), null, null, false, null, null, "deposithelp", "Deposit Helpppppppppppppppppp" },
+                    { new Guid("2cccba59-d810-4851-980f-fb11fed326b2"), null, null, false, null, null, "accounthelp", "Account Helpppppppppppppppppp" },
+                    { new Guid("4256d06b-8fce-4dd7-992d-5fe129ea2478"), null, null, false, null, null, "inviterreward", "0.1" },
+                    { new Guid("ad1e5744-b267-420b-b680-c19bad74ef30"), null, null, false, null, null, "thewallet", "TJ1000000000000000000000000000000" },
+                    { new Guid("cb2136e7-aa62-458a-8315-a34134c9ffd9"), null, null, false, null, null, "theqr", "https://localhost:7249/images/sina.jpg" },
+                    { new Guid("cdecaac4-fc52-43ff-a64b-b9ce2ca7778f"), null, null, false, null, null, "withdrawhelp", "Withdraw Helpppppppppppppppppp" },
+                    { new Guid("e487d40b-3ccd-48d8-af00-eafbbf30060a"), null, null, false, null, null, "transactionhelp", "Transaction Helpppppppppppppppppp" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Balance", "Cellphone", "ConfirmationCode", "Created", "CreatedBy", "Email", "Family", "Inviter", "IsActivated", "IsDeleted", "LastModified", "LastModifiedBy", "Name", "ProfileMediaURL", "Username", "WalletAddress" },
-                values: new object[] { new Guid("6d0f2b19-8df9-4588-abd7-dc53f807697d"), 0.0, "00989394125130", null, null, null, "sarparast_r@yahoo.com", "Jouybari", null, false, false, null, null, "Sina", "uploads/2022/9/sina2.jpg", "sinful", "TJ12333333333333323333333333333333" });
+                values: new object[] { new Guid("84020544-b6ce-4c4f-9a4f-d583484ba67e"), 0.0, "00989394125130", null, null, null, "sarparast_r@yahoo.com", "Jouybari", null, false, false, null, null, "Sina", "uploads/2022/9/sina2.jpg", "sinful", "TJ12333333333333323333333333333333" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

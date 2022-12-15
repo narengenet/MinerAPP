@@ -83,7 +83,7 @@ namespace MinerAPP.UI.Controllers
         }
         public ActionResult checkusername(string id)
         {
-            User usr = _usersServices.GetAllUser().Where(u => u.username == id).FirstOrDefault();
+            User usr = _usersServices.GetAllUser().Where(u => u.username.ToLower() == id).FirstOrDefault();
             if (usr == null)
             {
                 return Ok("ok");
@@ -96,7 +96,7 @@ namespace MinerAPP.UI.Controllers
         }
         public ActionResult checkinviterusername(string id)
         {
-            User usr = _usersServices.GetAllUser().Where(u => u.username == id).FirstOrDefault();
+            User usr = _usersServices.GetAllUser().Where(u => u.username.ToLower() == id).FirstOrDefault();
             if (usr == null)
             {
                 return Ok("-1");
@@ -164,7 +164,7 @@ namespace MinerAPP.UI.Controllers
 
             if (userLogin.email.Contains("@"))
             {
-                Users user = _usersServices.GetAllUsers().Where(u => u.Email == userLogin.email).FirstOrDefault();
+                Users user = _usersServices.GetAllUsers().Where(u => u.Email.ToLower() == userLogin.email.ToLower()).FirstOrDefault();
                 if (user != null)
                 {
                     Random r = new Random();
@@ -178,7 +178,7 @@ namespace MinerAPP.UI.Controllers
             }
             else
             {
-                Users user = _usersServices.GetAllUsers().Where(u => u.Username == userLogin.username).FirstOrDefault();
+                Users user = _usersServices.GetAllUsers().Where(u => u.Username.ToLower() == userLogin.username.ToLower()).FirstOrDefault();
                 if (user != null)
                 {
                     Random r = new Random();
@@ -238,6 +238,7 @@ namespace MinerAPP.UI.Controllers
         {
             Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
             Guid? theResult = null;
+            Guid userLoginId = Guid.Empty;
             bool status = true;
 
             if (result == null)
@@ -248,6 +249,7 @@ namespace MinerAPP.UI.Controllers
             if (result.IsDeleted == false && result.IsActivated)
             {
                 UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
+                userLoginId = usrsLogin.Id;
                 if (usrsLogin != null)
                 {
                     if (usrsLogin.IMEI != userLogin.imei)
@@ -271,6 +273,7 @@ namespace MinerAPP.UI.Controllers
 
             if (status)
             {
+                _usersServices.UpdateLastUserActivity(userLoginId);
                 return Ok("ok");
             }
             else
@@ -285,6 +288,7 @@ namespace MinerAPP.UI.Controllers
         {
             Users result = _usersServices.GetUser(Guid.Parse(userLogin.userid));
             Guid? theResult = null;
+            Guid? theUserLoginID = null;
             bool status = true;
 
             if (result == null)
@@ -295,14 +299,23 @@ namespace MinerAPP.UI.Controllers
             if (result.IsDeleted == false && result.IsActivated)
             {
                 UsersLogins usrsLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.User == result.Id).FirstOrDefault();
-                if (usrsLogin.IMEI != userLogin.imei)
+                if (usrsLogin!=null)
                 {
-                    status = false;
+                    theUserLoginID = usrsLogin.Id;
+                    if (usrsLogin.IMEI != userLogin.imei)
+                    {
+                        status = false;
+                    }
+                    if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                    {
+                        status = false;
+                    }
                 }
-                if (usrsLogin.DeviceModel != userLogin.devicemodel)
+                else
                 {
-                    status = false;
+                    status=false;
                 }
+
             }
             else
             {
@@ -313,6 +326,8 @@ namespace MinerAPP.UI.Controllers
             {
                 string theQR = _usersServices.GetAllStaticDics().Where(d => d.TheName == "theqr").First().TheValue;
                 string theWallet = _usersServices.GetAllStaticDics().Where(d => d.TheName == "thewallet").First().TheValue;
+
+                
 
                 DoubleStrings rslt = new DoubleStrings { data1 = theQR, data2 = theWallet };
                 return Ok(rslt);
@@ -603,6 +618,29 @@ namespace MinerAPP.UI.Controllers
 
             return Ok("-1");
 
+        }
+
+
+
+        [HttpPost]
+        public ActionResult gethelp([FromBody] UserLogin userReq)
+        {
+            string helpSection = Request.Headers["data1"].ToString();
+
+            Users theUser = _usersServices.GetUser(Guid.Parse(userReq.userid));
+            if (theUser != null)
+            {
+                UsersLogins usrLogin = _usersServices.GetAllUsersLogins().Where(ul => ul.Id == Guid.Parse(userReq.loginid) && ul.IMEI == userReq.imei && ul.DeviceModel == userReq.devicemodel).FirstOrDefault();
+                if (usrLogin != null)
+                {
+                    StaticDictionaries staticDic= _usersServices.GetAllStaticDics().Where(d => d.TheName == helpSection).FirstOrDefault();
+                    if (staticDic!=null)
+                    {
+                        return Ok(staticDic.TheValue);
+                    }
+                }
+            }
+            return Ok("-1");
         }
 
 
